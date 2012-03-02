@@ -88,12 +88,12 @@ public class FenwickTreeTest
 		// just making sure
 		Assert.assertEquals(1 + 2 + 4 + 8 + 11 + 100, ft.getCumulativeFrequency(5));
 
-		Assert.assertEquals(1, ft.indexOfCumulativeFrequency(2));
-		Assert.assertEquals(2, ft.indexOfCumulativeFrequency(2 + 4));
-		Assert.assertEquals(3, ft.indexOfCumulativeFrequency(2 + 4 + 8));
-		Assert.assertEquals(4, ft.indexOfCumulativeFrequency(2 + 4 + 8 + 11));
-		// NOTE: 8 instead of 5 because that's where the algorithm puts it
-		Assert.assertEquals(8, ft.indexOfCumulativeFrequency(2 + 4 + 8 + 11 + 100));
+		Assert.assertEquals(1, ft.indexOfCumulativeFrequency(1 + 2));
+		Assert.assertEquals(2, ft.indexOfCumulativeFrequency(1 + 2 + 4));
+		Assert.assertEquals(3, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8));
+		Assert.assertEquals(4, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11));
+		// NOTE: 7 instead of 5 because that's where the algorithm puts it
+		Assert.assertEquals(7, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11 + 100));
 	}
 	
 	@Test

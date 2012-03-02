@@ -36,12 +36,13 @@ public class FenwickTree
 	public void addValue(int idx, int val)
 	{
 		validateIdx(idx);
+		++idx;
 		int previousIdx = 0;
 		do
 		{
-			tree[idx] += val;
-			// add least-significant one
+			tree[idx - 1] += val;
 			previousIdx = idx;
+			// add least-significant one
 			idx += bitAnd(idx, -idx);
 		} while (idx < tree.length && idx > 0);
 		// update the length; NOTE: must be done at the end of this method because it modifies the idx variable
@@ -62,10 +63,11 @@ public class FenwickTree
 	public int getCumulativeFrequency(int idx)
 	{
 		validateIdx(idx);
-		int sum = tree[0];
+		++idx;
+		int sum = 0;
 		while (idx > 0)
 		{
-			sum += tree[idx];
+			sum += tree[idx - 1];
 			// remove least significant one
 			idx = bitAnd(idx, idx - 1);
 		}
@@ -85,23 +87,16 @@ public class FenwickTree
 	 */
 	public int getFrequency(int idx)
 	{
-		
 		validateIdx(idx);
-		int value = 0;
-		if(idx == 0)
-		{
-			value = this.tree[idx];
-		}
-		else
-		{
+		++idx;
+		int value = this.tree[idx - 1];
 			int parent = bitAnd(idx, idx - 1);
 			idx = idx - 1;
 			while (parent != idx)
 			{
-				value -= this.tree[idx];
+				value -= this.tree[idx - 1];
 				idx = bitAnd(idx, idx - 1);
 			}
-		}
 		return value;
 
 	}
@@ -110,34 +105,23 @@ public class FenwickTree
 	{
 		int idx = 0;
 		int mask = this.size;
-		if (freq > tree[0])
+		while (mask != 0 && freq != 0)
 		{
-			while (mask != 0 && freq != 0)
+			// get trial index
+			final int testIdx = idx + mask;
+			final int cumFreq = this.tree[testIdx - 1];
+			// we found it already!
+			if (freq >= cumFreq)
 			{
-				// get trial index
-				final int testIdx = idx + mask;
-				final int cumFreq = this.tree[testIdx];
-				// we found it already!
-				if (freq >= cumFreq)
-				{
-					// update current index
-					idx = testIdx;
-					// revise frequency
-					freq -= cumFreq;
-				}
-				mask /= 2;
-
+				// update current index
+				idx = testIdx;
+				// revise frequency
+				freq -= cumFreq;
 			}
+			mask /= 2;
+
 		}
-		// did we accumulate all the frequencies?
-		if (freq != 0)
-		{
-			return -1;
-		}
-		else
-		{
-			return idx;
-		}
+		return idx - 1;
 	}
 
 	/**
