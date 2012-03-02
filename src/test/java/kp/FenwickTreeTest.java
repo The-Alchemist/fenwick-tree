@@ -1,5 +1,6 @@
 package kp;
 
+import static org.junit.Assert.*;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -36,12 +37,13 @@ public class FenwickTreeTest
 	public void testMulipleAddToMulipleValues()
 	{
 		FenwickTree ft = new FenwickTree(256);
+		ft.addValue(0, 1);
 		ft.addValue(1, 1);
 		ft.addValue(1, 1);
 		ft.addValue(2, 1);
-		Assert.assertEquals(2, ft.getCumulativeFrequency(1));
-		Assert.assertEquals(3, ft.getCumulativeFrequency(2));
-		Assert.assertEquals(3, ft.getCumulativeFrequency(3));
+		Assert.assertEquals(3, ft.getCumulativeFrequency(1));
+		Assert.assertEquals(4, ft.getCumulativeFrequency(2));
+		Assert.assertEquals(4, ft.getCumulativeFrequency(3));
 	}
 
 	@Test
@@ -63,6 +65,7 @@ public class FenwickTreeTest
 	public void testGetIndividualFrequency()
 	{
 		FenwickTree ft = new FenwickTree(256);
+		ft.addValue(0, 1);
 		ft.addValue(1, 1);
 		ft.addValue(1, 1);
 		ft.addValue(2, 1);
@@ -75,6 +78,7 @@ public class FenwickTreeTest
 	public void findElementCorrespondingToACumulativeFreq()
 	{
 		FenwickTree ft = new FenwickTree(10);
+		ft.addValue(0, 1);
 		ft.addValue(1, 2);
 		ft.addValue(2, 4);
 		ft.addValue(3, 8);
@@ -82,7 +86,7 @@ public class FenwickTreeTest
 		ft.addValue(5, 100);
 
 		// just making sure
-		Assert.assertEquals(2 + 4 + 8 + 11 + 100, ft.getCumulativeFrequency(5));
+		Assert.assertEquals(1 + 2 + 4 + 8 + 11 + 100, ft.getCumulativeFrequency(5));
 
 		Assert.assertEquals(1, ft.indexOfCumulativeFrequency(2));
 		Assert.assertEquals(2, ft.indexOfCumulativeFrequency(2 + 4));
@@ -91,11 +95,23 @@ public class FenwickTreeTest
 		// NOTE: 8 instead of 5 because that's where the algorithm puts it
 		Assert.assertEquals(8, ft.indexOfCumulativeFrequency(2 + 4 + 8 + 11 + 100));
 	}
+	
+	@Test
+	public void verifyZeroes() throws Exception
+	{
+		FenwickTree ft = new FenwickTree(10);
+
+		ft.addValue(0, 10);
+		Assert.assertEquals(10, ft.getCumulativeFrequency(0));
+		Assert.assertEquals(10, ft.getFrequency(0));
+	}
 
 	@Test
 	public void testRescaling()
 	{
 		FenwickTree ft = new FenwickTree(10);
+
+		ft.addValue(0, 10);
 		ft.addValue(1, 2);
 		ft.addValue(2, 4);
 		ft.addValue(3, 8);
@@ -103,6 +119,7 @@ public class FenwickTreeTest
 		ft.addValue(5, 124);
 
 		// before rescaling
+		Assert.assertEquals(10, ft.getFrequency(0));
 		Assert.assertEquals(2, ft.getFrequency(1));
 		Assert.assertEquals(4, ft.getFrequency(2));
 		Assert.assertEquals(8, ft.getFrequency(3));

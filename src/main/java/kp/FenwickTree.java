@@ -85,9 +85,14 @@ public class FenwickTree
 	 */
 	public int getFrequency(int idx)
 	{
+		
 		validateIdx(idx);
-		int value = this.tree[idx];
-		if (idx >= 0)
+		int value = 0;
+		if(idx == 0)
+		{
+			value = this.tree[idx];
+		}
+		else
 		{
 			int parent = bitAnd(idx, idx - 1);
 			idx = idx - 1;
