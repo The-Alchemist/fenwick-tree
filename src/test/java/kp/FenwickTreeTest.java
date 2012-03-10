@@ -1,7 +1,6 @@
 package kp;
 
 import static org.junit.Assert.*;
-import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ public class FenwickTreeTest
 	{
 		FenwickTree ft = new FenwickTree(256);
 		ft.addValue(1, 1);
-		Assert.assertEquals(1, ft.getCumulativeFrequency(1));
+		assertEquals(1, ft.getCumulativeFrequency(1));
 	}
 	
 	@Test
@@ -21,7 +20,7 @@ public class FenwickTreeTest
 	{
 		FenwickTree ft = new FenwickTree(256);
 		ft.addValue(0, 1);
-		Assert.assertEquals(1, ft.getCumulativeFrequency(0));
+		assertEquals(1, ft.getCumulativeFrequency(0));
 	}
 
 	@Test
@@ -30,7 +29,7 @@ public class FenwickTreeTest
 		FenwickTree ft = new FenwickTree(256);
 		ft.addValue(1, 1);
 		ft.addValue(1, 1);
-		Assert.assertEquals(2, ft.getCumulativeFrequency(1));
+		assertEquals(2, ft.getCumulativeFrequency(1));
 	}
 
 	@Test
@@ -41,9 +40,9 @@ public class FenwickTreeTest
 		ft.addValue(1, 1);
 		ft.addValue(1, 1);
 		ft.addValue(2, 1);
-		Assert.assertEquals(3, ft.getCumulativeFrequency(1));
-		Assert.assertEquals(4, ft.getCumulativeFrequency(2));
-		Assert.assertEquals(4, ft.getCumulativeFrequency(3));
+		assertEquals(3, ft.getCumulativeFrequency(1));
+		assertEquals(4, ft.getCumulativeFrequency(2));
+		assertEquals(4, ft.getCumulativeFrequency(3));
 	}
 
 	@Test
@@ -57,8 +56,8 @@ public class FenwickTreeTest
 			ft.addValue(1, i);
 			ft.addValue(2, i);
 		}
-		Assert.assertEquals(sum, ft.getCumulativeFrequency(1));
-		Assert.assertEquals(sum * 2, ft.getCumulativeFrequency(2));
+		assertEquals(sum, ft.getCumulativeFrequency(1));
+		assertEquals(sum * 2, ft.getCumulativeFrequency(2));
 	}
 
 	@Test
@@ -70,8 +69,8 @@ public class FenwickTreeTest
 		ft.addValue(1, 1);
 		ft.addValue(2, 1);
 		ft.addValue(9, 4);
-		Assert.assertEquals(2, ft.getFrequency(1));
-		Assert.assertEquals(1, ft.getFrequency(2));
+		assertEquals(2, ft.getFrequency(1));
+		assertEquals(1, ft.getFrequency(2));
 	}
 
 	@Test
@@ -86,24 +85,24 @@ public class FenwickTreeTest
 		ft.addValue(5, 100);
 
 		// just making sure
-		Assert.assertEquals(1 + 2 + 4 + 8 + 11 + 100, ft.getCumulativeFrequency(5));
+		assertEquals(1 + 2 + 4 + 8 + 11 + 100, ft.getCumulativeFrequency(5));
 
-		Assert.assertEquals(1, ft.indexOfCumulativeFrequency(1 + 2));
-		Assert.assertEquals(2, ft.indexOfCumulativeFrequency(1 + 2 + 4));
-		Assert.assertEquals(3, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8));
-		Assert.assertEquals(4, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11));
+		assertEquals(1, ft.indexOfCumulativeFrequency(1 + 2));
+		assertEquals(2, ft.indexOfCumulativeFrequency(1 + 2 + 4));
+		assertEquals(3, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8));
+		assertEquals(4, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11));
 		// NOTE: 7 instead of 5 because that's where the algorithm puts it
-		Assert.assertEquals(7, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11 + 100));
+		assertEquals(7, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11 + 100));
 	}
 	
 	@Test
 	public void verifyZeroes() throws Exception
 	{
 		FenwickTree ft = new FenwickTree(10);
-
+		assertEquals(0, ft.getCumulativeFrequency(0));
 		ft.addValue(0, 10);
-		Assert.assertEquals(10, ft.getCumulativeFrequency(0));
-		Assert.assertEquals(10, ft.getFrequency(0));
+		assertEquals(10, ft.getCumulativeFrequency(0));
+		assertEquals(10, ft.getFrequency(0));
 	}
 
 	@Test
@@ -119,21 +118,21 @@ public class FenwickTreeTest
 		ft.addValue(5, 124);
 
 		// before rescaling
-		Assert.assertEquals(10, ft.getFrequency(0));
-		Assert.assertEquals(2, ft.getFrequency(1));
-		Assert.assertEquals(4, ft.getFrequency(2));
-		Assert.assertEquals(8, ft.getFrequency(3));
-		Assert.assertEquals(100, ft.getFrequency(4));
+		assertEquals(10, ft.getFrequency(0));
+		assertEquals(2, ft.getFrequency(1));
+		assertEquals(4, ft.getFrequency(2));
+		assertEquals(8, ft.getFrequency(3));
+		assertEquals(100, ft.getFrequency(4));
 
 		// rescale
 		ft.rescale(2);
 
 		// measure after rescaling
-		Assert.assertEquals(1, ft.getFrequency(1));
-		Assert.assertEquals(2, ft.getFrequency(2));
-		Assert.assertEquals(4, ft.getFrequency(3));
-		Assert.assertEquals(50, ft.getFrequency(4));
-		Assert.assertEquals(124 / 2, ft.getFrequency(5));
+		assertEquals(1, ft.getFrequency(1));
+		assertEquals(2, ft.getFrequency(2));
+		assertEquals(4, ft.getFrequency(3));
+		assertEquals(50, ft.getFrequency(4));
+		assertEquals(124 / 2, ft.getFrequency(5));
 	}
 
 }
