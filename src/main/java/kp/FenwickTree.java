@@ -44,7 +44,7 @@ public class FenwickTree
 			previousIdx = idx;
 			// add least-significant one
 			idx += bitAnd(idx, -idx);
-		} while (idx < tree.length && idx > 0);
+		} while (idx <= tree.length && idx > 0);
 		// update the length; NOTE: must be done at the end of this method because it modifies the idx variable
 		this.size = Math.max(this.size, previousIdx);
 	}
