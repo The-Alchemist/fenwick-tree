@@ -76,7 +76,7 @@ public class FenwickTreeTest
 	@Test
 	public void findElementCorrespondingToACumulativeFreq()
 	{
-		FenwickTree ft = new FenwickTree(10);
+		FenwickTree ft = new FenwickTree(6);
 		ft.addValue(0, 1);
 		ft.addValue(1, 2);
 		ft.addValue(2, 4);
@@ -87,12 +87,14 @@ public class FenwickTreeTest
 		// just making sure
 		assertEquals(1 + 2 + 4 + 8 + 11 + 100, ft.getCumulativeFrequency(5));
 
+		assertEquals(-1, ft.indexOfCumulativeFrequency(0));
+		assertEquals(0, ft.indexOfCumulativeFrequency(1));
 		assertEquals(1, ft.indexOfCumulativeFrequency(1 + 2));
 		assertEquals(2, ft.indexOfCumulativeFrequency(1 + 2 + 4));
 		assertEquals(3, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8));
 		assertEquals(4, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11));
-		// NOTE: 7 instead of 5 because that's where the algorithm puts it
-		assertEquals(7, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11 + 100));
+		assertEquals(5, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11 + 100));
+		assertEquals(5, ft.indexOfCumulativeFrequency(1 + 2 + 4 + 8 + 11 + 100 + 1));
 	}
 	
 	@Test

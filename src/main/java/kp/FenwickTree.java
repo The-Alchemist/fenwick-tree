@@ -36,17 +36,14 @@ public class FenwickTree
 	public void addValue(int idx, int val)
 	{
 		validateIdx(idx);
+		size = Math.max(this.size, idx);
 		++idx;
-		int previousIdx = 0;
 		do
 		{
 			tree[idx - 1] += val;
-			previousIdx = idx;
 			// add least-significant one
 			idx += bitAnd(idx, -idx);
-		} while (idx <= tree.length && idx > 0);
-		// update the length; NOTE: must be done at the end of this method because it modifies the idx variable
-		this.size = Math.max(this.size, previousIdx);
+		} while (idx <= tree.length);
 	}
 
 	private void validateIdx(int idx)
@@ -104,19 +101,20 @@ public class FenwickTree
 	public int indexOfCumulativeFrequency(int freq)
 	{
 		int idx = 0;
-		int mask = this.size;
-		while (mask != 0 && freq != 0)
+		int mask = Integer.highestOneBit(size);
+		while (mask != 0)
 		{
 			// get trial index
 			final int testIdx = idx + mask;
-			final int cumFreq = this.tree[testIdx - 1];
-			// we found it already!
-			if (freq >= cumFreq)
-			{
-				// update current index
-				idx = testIdx;
-				// revise frequency
-				freq -= cumFreq;
+			if (testIdx - 1 <= size) {
+				final int cumFreq = this.tree[testIdx - 1];
+				// we found it already!
+				if (freq >= cumFreq) {
+					// update current index
+					idx = testIdx;
+					// revise frequency
+					freq -= cumFreq;
+				}
 			}
 			mask /= 2;
 
