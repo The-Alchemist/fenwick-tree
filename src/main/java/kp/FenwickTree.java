@@ -12,131 +12,76 @@ package kp;
  */
 public class FenwickTree
 {
-	/**
-	 * The data structure that actually holds the data.
-	 * 
-	 * Peter Fenwick uses the same variable name in his paper.
-	 */
-	protected int[] tree;
-	/**
-	 * Keeps track of the largest index that contains data in the tree variable.
-	 * 
-	 * The entire tree does not have to be full
-	 */
-	protected int size;
 
-	public FenwickTree(int N)
+	private int[] tree;
+	
+	private int largestRegion;
+	
+	public FenwickTree(int size)
 	{
-		tree = new int[N];
+		tree = new int[size + 1];
+		largestRegion = Integer.highestOneBit(size);
 	}
-
+	
 	/**
-	 * add val to the k-th element
+	 * Add or remove values at index.  Negative value must be attached to 
+	 * a previously positive value of equal or greater size, to ensure validity
+	 * of tree.
+	 * @param index
+	 * @param value
 	 */
-	public void addValue(int idx, int val)
+	public void addValue(int index, int value)
 	{
-		validateIdx(idx);
-		size = Math.max(this.size, idx);
-		++idx;
-		do
+		++index;
+		while (index < tree.length)
 		{
-			tree[idx - 1] += val;
-			// add least-significant one
-			idx += bitAnd(idx, -idx);
-		} while (idx <= tree.length);
-	}
-
-	private void validateIdx(int idx)
-	{
-		if (idx < 0)
-		{
-			throw new IllegalArgumentException("Cannot start with < 1, " + idx);
-		}
-	}
-
-	/**
-	 * get sum of elements 1 thru k
-	 */
-	public int getCumulativeFrequency(int idx)
-	{
-		validateIdx(idx);
-		++idx;
-		int sum = 0;
-		while (idx > 0)
-		{
-			sum += tree[idx - 1];
-			// remove least significant one
-			idx = bitAnd(idx, idx - 1);
-		}
-		return sum;
-	}
-
-	private int bitAnd(int i, int j)
-	{
-		return i & j;
-	}
-
-	/**
-	 * Read an individual frequency.
-	 * 
-	 * @param idx
-	 * @return
-	 */
-	public int getFrequency(int idx)
-	{
-		validateIdx(idx);
-		++idx;
-		int value = this.tree[idx - 1];
-			int parent = bitAnd(idx, idx - 1);
-			idx = idx - 1;
-			while (parent != idx)
-			{
-				value -= this.tree[idx - 1];
-				idx = bitAnd(idx, idx - 1);
-			}
-		return value;
-
-	}
-
-	public int indexOfCumulativeFrequency(int freq)
-	{
-		int idx = 0;
-		int mask = Integer.highestOneBit(size);
-		while (mask != 0)
-		{
-			// get trial index
-			final int testIdx = idx + mask;
-			if (testIdx - 1 <= size) {
-				final int cumFreq = this.tree[testIdx - 1];
-				// we found it already!
-				if (freq >= cumFreq) {
-					// update current index
-					idx = testIdx;
-					// revise frequency
-					freq -= cumFreq;
-				}
-			}
-			mask /= 2;
-
-		}
-		return idx - 1;
-	}
-
-	/**
-	 * 
-	 * @param scaleFactor
-	 *            integer to divide all the propabilities by
-	 */
-	public void rescale(int scaleFactor)
-	{
-		for (int i = this.size; i != 0; --i)
-		{
-			addValue(i, -getFrequency(i) / scaleFactor);
+			tree[index] += value;
+			index += Integer.lowestOneBit(index);
 		}
 	}
 	
-	public int size()
+	public int indexAtCumulativeFreqSmallest(int freq)
 	{
-		return this.size;
+		return indexAtCumulativeFreqGreatest(freq - 1) + 1;
+	}
+	
+	/**
+	 * Greatest index with cumulative frequency given.  No guarantees on frequencies
+	 * outside of range.
+	 * @param freq
+	 * @return
+	 */
+	public int indexAtCumulativeFreqGreatest(int freq)
+	{
+		int index = 0;
+		int mask = largestRegion;
+		while (mask != 0)
+		{
+			int newIndex = index + mask;
+			if (newIndex < tree.length && freq >= tree[newIndex])
+			{
+				index = newIndex;
+				freq -= tree[newIndex];
+			}
+			mask /= 2;
+		}
+		return index - 1;
+	}
+	
+	/**
+	 * get Cumulative Frequency, from 0 to index, inclusive
+	 * @param index
+	 * @return
+	 */
+	public int getCumulativeFreq(int index)
+	{
+		++index;
+		int sum = 0;
+		while (index != 0)
+		{
+			sum += tree[index];
+			index -= Integer.lowestOneBit(index);
+		}
+		return sum;
 	}
 }
